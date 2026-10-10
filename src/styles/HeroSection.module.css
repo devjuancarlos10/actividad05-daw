@@ -1,0 +1,250 @@
+/* HeroSection.module.css - Portada Principal Clinica */
+.heroContainer {
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 2rem 5rem;
+  background: radial-gradient(circle at 10% 20%, rgba(224, 242, 254, 0.6) 0%, transparent 40%),
+              radial-gradient(circle at 90% 80%, rgba(209, 250, 229, 0.5) 0%, transparent 40%),
+              linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.heroContent {
+  max-width: 1360px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  gap: 3.5rem;
+}
+
+@media (max-width: 1024px) {
+  .heroContent {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #15803d;
+  margin-bottom: 1.25rem;
+}
+
+.title {
+  font-size: 3.2rem;
+  font-weight: 850;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.3rem;
+  }
+}
+
+.titleGradient {
+  background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.description {
+  font-size: 1.1rem;
+  color: #475569;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 620px;
+}
+
+@media (max-width: 1024px) {
+  .description {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.ctaGroup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 1024px) {
+  .ctaGroup {
+    justify-content: center;
+  }
+}
+
+.primaryCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.8rem;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.3);
+  transition: all 0.25s ease;
+}
+
+.primaryCta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(2, 132, 199, 0.4);
+}
+
+.secondaryCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.secondaryCta:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0284c7;
+}
+
+.trustBadges {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+@media (max-width: 1024px) {
+  .trustBadges {
+    justify-content: center;
+  }
+}
+
+.trustItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.trustNumber {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.trustLabel {
+  font-size: 0.76rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Ilustracion / Card Visual Flotante */
+.visualCard {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 1.75rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.12);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardStatusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.vitalSignsBox {
+  background: #0f172a;
+  border-radius: 16px;
+  padding: 1.25rem;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.vitalsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vitalsValue {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #38bdf8;
+  font-family: var(--font-sans);
+}
+
+.ecgLine {
+  height: 38px;
+  background: linear-gradient(90deg, transparent 0%, rgba(56, 189, 248, 0.2) 50%, transparent 100%);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #38bdf8;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+}
+
+.floatingMiniCard {
+  position: absolute;
+  bottom: -20px;
+  left: -20px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 0.85rem 1.15rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .floatingMiniCard {
+    position: static;
+  }
+}

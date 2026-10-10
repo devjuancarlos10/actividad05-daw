@@ -1,0 +1,178 @@
+/* DoctorsSection.module.css - Especialistas Quirurgicos y Medicos */
+.sectionWrapper {
+  padding: 5rem 2rem;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.innerContainer {
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 3.5rem;
+}
+
+.headerText {
+  max-width: 650px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  margin-bottom: 0.85rem;
+}
+
+.title {
+  font-size: 2.25rem;
+  font-weight: 850;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.doctorsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.75rem;
+}
+
+.doctorCard {
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.doctorCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 32px -8px rgba(14, 165, 233, 0.14);
+  border-color: #7dd3fc;
+}
+
+.cardTop {
+  padding: 1.75rem 1.5rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0284c7;
+  font-weight: 800;
+  font-size: 1.25rem;
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.docInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.docName {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.docSpecialty {
+  font-size: 0.82rem;
+  color: #0284c7;
+  font-weight: 700;
+  margin-top: 0.15rem;
+}
+
+.docCmp {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-family: var(--font-mono);
+}
+
+.cardBody {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.hospitalDept {
+  font-size: 0.8rem;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.availabilityBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.cardAction {
+  padding: 1rem 1.5rem 1.25rem;
+  background: #fafbfc;
+  border-top: 1px solid #f1f5f9;
+}
+
+.btnSchedule {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #0284c7;
+  border: 1px solid #bae6fd;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.btnSchedule:hover {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+}
