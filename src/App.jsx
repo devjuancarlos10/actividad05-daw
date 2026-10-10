@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import Dashboard from './components/Dashboard';
@@ -25,12 +25,56 @@ export default function App() {
   const [isTechModalOpen, setIsTechModalOpen] = useState(false);
   const [preselectedSpecialty, setPreselectedSpecialty] = useState('');
 
-  // 1. Datos de Métricas Hospitalarias pasados vía props a Dashboard (Paso 3)
+  // 1. Estado en tiempo real de Métricas Hospitalarias (Paso 3)
+  const [patientsCount, setPatientsCount] = useState(3420);
+  const [waitTime, setWaitTime] = useState(14);
+  const [recoveryRate, setRecoveryRate] = useState(98.6);
+  const [surgeriesActive, setSurgeriesActive] = useState(128);
+
+  // Ocupación de camas y signos en tiempo real
+  const [occupancy, setOccupancy] = useState({
+    uci: 88,
+    operating: 75,
+    recovery: 64,
+    emergency: 52,
+    icuBpm: 74
+  });
+
+  // Simulación de actividad clínica en tiempo real cada 3 segundos
+  useEffect(() => {
+    const liveInterval = setInterval(() => {
+      // Incremento paulatino de pacientes atendidos
+      if (Math.random() > 0.5) {
+        setPatientsCount((prev) => prev + 1);
+      }
+
+      // Variación de tiempo de espera en urgencias (13 a 16 min)
+      const newWait = 13 + Math.floor(Math.random() * 4);
+      setWaitTime(newWait);
+
+      // Variación de tasa de recuperación (98.5% a 98.9%)
+      const newRate = +(98.5 + Math.random() * 0.4).toFixed(1);
+      setRecoveryRate(newRate);
+
+      // Variación sutil de ocupación de camas hospitalarias
+      setOccupancy((prev) => ({
+        uci: 87 + Math.floor(Math.random() * 3),
+        operating: 74 + Math.floor(Math.random() * 3),
+        recovery: 63 + Math.floor(Math.random() * 3),
+        emergency: 51 + Math.floor(Math.random() * 4),
+        icuBpm: 72 + Math.floor(Math.random() * 5)
+      }));
+    }, 3200);
+
+    return () => clearInterval(liveInterval);
+  }, []);
+
+  // Métricas computadas en vivo pasadas vía props a Dashboard
   const clinicMetrics = [
     {
       id: 'met-1',
       title: 'Pacientes Atendidos',
-      value: '3,420',
+      value: patientsCount.toLocaleString(),
       unit: 'pacientes',
       change: '+14.2%',
       trend: 'up',
@@ -39,7 +83,7 @@ export default function App() {
     {
       id: 'met-2',
       title: 'Cirugías Programadas',
-      value: '128',
+      value: surgeriesActive,
       unit: 'quirófanos',
       change: '+6.5%',
       trend: 'up',
@@ -48,7 +92,7 @@ export default function App() {
     {
       id: 'met-3',
       title: 'Espera en Urgencias',
-      value: '14 min',
+      value: `${waitTime} min`,
       unit: '',
       change: '-22.4%',
       trend: 'down',
@@ -58,7 +102,7 @@ export default function App() {
     {
       id: 'met-4',
       title: 'Tasa de Recuperación',
-      value: '98.6%',
+      value: `${recoveryRate}%`,
       unit: '',
       change: '+1.8%',
       trend: 'up',
@@ -67,12 +111,28 @@ export default function App() {
   ];
 
   // 2. Datos de Pacientes en Triaje para composición mediante {children} (Paso 3)
-  const triagePatients = [
+  const [triagePatients, setTriagePatients] = useState([
     { id: 'PAC-1042', name: 'Carmen Salazar V.', age: 54, triage: 'Crítico', dept: 'UCI Quirúrgica', doc: 'Dr. Morales', wait: '2 min', vitals: 'SpO2 89% - TA 155/95' },
     { id: 'PAC-1043', name: 'Roberto Huamán G.', age: 41, triage: 'Urgente', dept: 'Traumatología', doc: 'Dr. Mendoza', wait: '11 min', vitals: 'SpO2 97% - TA 130/85' },
     { id: 'PAC-1044', name: 'Lucía Fernández M.', age: 29, triage: 'Urgente', dept: 'Cardiología', doc: 'Dra. Valenzuela', wait: '15 min', vitals: 'SpO2 98% - TA 120/80' },
     { id: 'PAC-1045', name: 'Eduardo Córdova P.', age: 67, triage: 'Estable', dept: 'Medicina Interna', doc: 'Dra. Paredes', wait: '26 min', vitals: 'SpO2 99% - TA 118/75' }
-  ];
+  ]);
+
+  // Actualizar lista en vivo al guardar cita en el sistema
+  const handleAppointmentCreated = (newApp) => {
+    const newTriageEntry = {
+      id: newApp.id,
+      name: newApp.patientName,
+      age: 35,
+      triage: newApp.triageLevel === 'urgente' ? 'Crítico' : newApp.triageLevel === 'prioritaria' ? 'Urgente' : 'Estable',
+      dept: newApp.specialty,
+      doc: 'Dr. Turno Activo',
+      wait: 'Recién Ingresado',
+      vitals: 'Triaje Digital'
+    };
+    setTriagePatients((prev) => [newTriageEntry, ...prev]);
+    setPatientsCount((prev) => prev + 1);
+  };
 
   // 3. Catálogo de Especialidades Quirúrgicas (Paso 3)
   const servicesCatalog = [
@@ -266,40 +326,40 @@ export default function App() {
               <div className={dashboardStyles.occupancyItem}>
                 <div className={dashboardStyles.occupancyLabel}>
                   <span>UCI Quirúrgica (Camas de Alta Complejidad)</span>
-                  <span style={{ color: '#ef4444', fontWeight: 700 }}>88% Ocupado</span>
+                  <span style={{ color: '#ef4444', fontWeight: 700 }}>{occupancy.uci}% Ocupado</span>
                 </div>
                 <div className={dashboardStyles.progressBarTrack}>
-                  <div className={dashboardStyles.progressBarFill} style={{ width: '88%', background: '#ef4444' }} />
+                  <div className={dashboardStyles.progressBarFill} style={{ width: `${occupancy.uci}%`, background: '#ef4444' }} />
                 </div>
               </div>
 
               <div className={dashboardStyles.occupancyItem}>
                 <div className={dashboardStyles.occupancyLabel}>
                   <span>Pabellones Quirúrgicos en Operación</span>
-                  <span style={{ color: '#f59e0b', fontWeight: 700 }}>75% Operativo</span>
+                  <span style={{ color: '#f59e0b', fontWeight: 700 }}>{occupancy.operating}% Operativo</span>
                 </div>
                 <div className={dashboardStyles.progressBarTrack}>
-                  <div className={dashboardStyles.progressBarFill} style={{ width: '75%', background: '#f59e0b' }} />
+                  <div className={dashboardStyles.progressBarFill} style={{ width: `${occupancy.operating}%`, background: '#f59e0b' }} />
                 </div>
               </div>
 
               <div className={dashboardStyles.occupancyItem}>
                 <div className={dashboardStyles.occupancyLabel}>
                   <span>Salas de Recuperación Postoperatoria</span>
-                  <span style={{ color: '#0284c7', fontWeight: 700 }}>64% Libre</span>
+                  <span style={{ color: '#0284c7', fontWeight: 700 }}>{occupancy.recovery}% Libre</span>
                 </div>
                 <div className={dashboardStyles.progressBarTrack}>
-                  <div className={dashboardStyles.progressBarFill} style={{ width: '64%', background: '#0284c7' }} />
+                  <div className={dashboardStyles.progressBarFill} style={{ width: `${occupancy.recovery}%`, background: '#0284c7' }} />
                 </div>
               </div>
 
               <div className={dashboardStyles.occupancyItem}>
                 <div className={dashboardStyles.occupancyLabel}>
                   <span>Camas de Observación de Urgencias</span>
-                  <span style={{ color: '#10b981', fontWeight: 700 }}>52% Normal</span>
+                  <span style={{ color: '#10b981', fontWeight: 700 }}>{occupancy.emergency}% Normal</span>
                 </div>
                 <div className={dashboardStyles.progressBarTrack}>
-                  <div className={dashboardStyles.progressBarFill} style={{ width: '52%', background: '#10b981' }} />
+                  <div className={dashboardStyles.progressBarFill} style={{ width: `${occupancy.emergency}%`, background: '#10b981' }} />
                 </div>
               </div>
             </div>
@@ -318,7 +378,7 @@ export default function App() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                 <Heart size={18} className="animate-heartbeat" color="#ef4444" />
                 <span style={{ fontSize: '0.8rem', fontFamily: 'var(--font-mono)' }}>
-                  Telemetría UCI Central: <strong>74 BPM</strong>
+                  Telemetría UCI Central: <strong>{occupancy.icuBpm} BPM</strong>
                 </span>
               </div>
               <span style={{ fontSize: '0.72rem', background: 'rgba(34, 197, 94, 0.2)', padding: '0.2rem 0.6rem', borderRadius: '4px', fontWeight: 700 }}>
@@ -344,9 +404,10 @@ export default function App() {
         }}
       />
 
-      {/* 6. Formulario de Citas y Triaje Digital */}
+      {/* 6. Formulario de Citas y Triaje Digital con persistencia LocalStorage */}
       <AppointmentSection
         selectedSpecialty={preselectedSpecialty}
+        onAppointmentCreated={handleAppointmentCreated}
       />
 
       {/* 7. Modal de Auditoría Técnica de los 5 Pasos Arquitectónicos */}

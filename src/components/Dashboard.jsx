@@ -63,7 +63,6 @@ export default function Dashboard({
           />
         ))}
       </div>
-
       {/* Renderizado de secciones compuestas pasadas mediante children */}
       {children && (
         <div className={styles.childrenSection}>

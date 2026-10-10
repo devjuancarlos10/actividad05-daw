@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../styles/HeroSection.module.css';
 import { 
   ShieldCheck, HeartPulse, Stethoscope, ArrowRight, 
@@ -7,13 +7,61 @@ import {
 
 /**
  * Componente HeroSection para la portada institucional de la clínica.
- * Cumple con principios de semántica HTML5 y estilado encapsulado con CSS Modules.
+ * Incluye signos vitales dinámicos que fluctúan en tiempo real y cronómetro quirúrgico activo.
  * 
  * @param {Object} props
  * @param {Function} props.onScheduleClick - Callback para ir al agendamiento.
  * @param {Function} props.onExploreClick - Callback para explorar el dashboard clínico.
  */
 export default function HeroSection({ onScheduleClick, onExploreClick }) {
+  // Estado de signos vitales en tiempo real
+  const [bpm, setBpm] = useState(72);
+  const [spo2, setSpo2] = useState(99);
+  const [bloodPressure, setBloodPressure] = useState('120/80');
+  const [surgicalSeconds, setSurgicalSeconds] = useState(5050); // 01:24:10 inicial
+  const [recoveredPatients, setRecoveredPatients] = useState(28542);
+
+  // Efecto para cronómetro quirúrgico en vivo
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSurgicalSeconds((prev) => prev + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Efecto para fluctuación realista de telemetría de signos vitales
+  useEffect(() => {
+    const vitalsInterval = setInterval(() => {
+      // Fluctuación de pulso cardíaco entre 71 y 75 BPM
+      const newBpm = Math.floor(71 + Math.random() * 5);
+      setBpm(newBpm);
+
+      // Fluctuación de SpO2 entre 98% y 99%
+      const newSpo2 = Math.random() > 0.4 ? 99 : 98;
+      setSpo2(newSpo2);
+
+      // Presión arterial realista
+      const systolic = 118 + Math.floor(Math.random() * 4);
+      const diastolic = 78 + Math.floor(Math.random() * 3);
+      setBloodPressure(`${systolic}/${diastolic}`);
+
+      // Pequeño incremento ocasional de pacientes recuperados
+      if (Math.random() > 0.7) {
+        setRecoveredPatients((prev) => prev + 1);
+      }
+    }, 2800);
+
+    return () => clearInterval(vitalsInterval);
+  }, []);
+
+  // Formato HH:MM:SS para el cronómetro de la cirugía
+  const formatSurgicalTime = (totalSec) => {
+    const h = String(Math.floor(totalSec / 3600)).padStart(2, '0');
+    const m = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');
+    const s = String(totalSec % 60).padStart(2, '0');
+    return `${h}:${m}:${s}`;
+  };
+
   return (
     <section className={styles.heroContainer} id="hero">
       <div className={styles.heroContent}>
@@ -48,7 +96,9 @@ export default function HeroSection({ onScheduleClick, onExploreClick }) {
 
           <div className={styles.trustBadges}>
             <div className={styles.trustItem}>
-              <span className={styles.trustNumber}>+28,500</span>
+              <span className={styles.trustNumber} style={{ fontFamily: 'var(--font-mono)' }}>
+                +{recoveredPatients.toLocaleString()}
+              </span>
               <span className={styles.trustLabel}>Pacientes Recuperados</span>
             </div>
             <div className={styles.trustItem}>
@@ -94,7 +144,7 @@ export default function HeroSection({ onScheduleClick, onExploreClick }) {
 
             <div className={styles.cardStatusPill}>
               <span className="animate-pulse-glow" style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e' }} />
-              <span>En Operación</span>
+              <span>En Operación (En Vivo)</span>
             </div>
           </div>
 
@@ -105,7 +155,7 @@ export default function HeroSection({ onScheduleClick, onExploreClick }) {
                   Frecuencia Cardíaca
                 </div>
                 <div className={styles.vitalsValue}>
-                  72 <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>BPM</span>
+                  {bpm} <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>BPM</span>
                 </div>
               </div>
               <div>
@@ -113,7 +163,7 @@ export default function HeroSection({ onScheduleClick, onExploreClick }) {
                   Saturación SpO2
                 </div>
                 <div className={styles.vitalsValue} style={{ color: '#34d399' }}>
-                  99%
+                  {spo2}%
                 </div>
               </div>
               <div>
@@ -121,13 +171,13 @@ export default function HeroSection({ onScheduleClick, onExploreClick }) {
                   Presión Arterial
                 </div>
                 <div className={styles.vitalsValue} style={{ color: '#f8fafc' }}>
-                  120/80
+                  {bloodPressure}
                 </div>
               </div>
             </div>
 
             <div className={styles.ecgLine}>
-              <span className="animate-pulse">▲▼▲─── RITMO SINUSAL ESTABLE ───▲▼▲</span>
+              <span className="animate-pulse">▲▼▲─── RITMO SINUSAL ({bpm} BPM) ───▲▼▲</span>
             </div>
           </div>
 
@@ -143,7 +193,9 @@ export default function HeroSection({ onScheduleClick, onExploreClick }) {
               <UserCheck size={16} color="#0284c7" />
               <span>Cirujano: <strong>Dr. Alejandro Morales</strong></span>
             </div>
-            <span style={{ fontWeight: 700, color: '#10b981' }}>Tiempo: 01:24:10</span>
+            <span style={{ fontWeight: 700, color: '#10b981', fontFamily: 'var(--font-mono)' }}>
+              Tiempo: {formatSurgicalTime(surgicalSeconds)}
+            </span>
           </div>
 
           {/* Badge flotante inferior */}

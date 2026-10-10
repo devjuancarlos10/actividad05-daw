@@ -1,24 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../styles/Navbar.module.css';
-import { HeartPulse, PhoneCall, Calendar, Code2, Clock, MapPin } from 'lucide-react';
+import { HeartPulse, PhoneCall, Calendar, Code2, Clock, MapPin, Activity } from 'lucide-react';
 
 /**
  * Componente Navbar de la Clínica Quirúrgica MediCare.
- * Implementa SRP y CSS Modules para encapsulamiento total.
+ * Incluye reloj digital en tiempo real y telemetría quirúrgica activa.
  * 
  * @param {Object} props
  * @param {Function} props.onOpenTechnicalModal - Callback para abrir la auditoría de los 5 pasos arquitectónicos.
  * @param {Function} props.onScrollToSection - Función para desplazarse a las secciones clínicas.
  */
 export default function Navbar({ onOpenTechnicalModal, onScrollToSection }) {
+  const [timeString, setTimeString] = useState('');
+
+  // Reloj digital en tiempo real que se actualiza cada segundo
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      setTimeString(now.toLocaleTimeString('es-PE', { hour12: true }));
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <header className={styles.navWrapper}>
-      {/* Barra superior con datos de urgencias y ubicación */}
+      {/* Barra superior con datos en tiempo real de urgencias y hora */}
       <div className={styles.topBar}>
         <div className={styles.topBarInfo}>
           <div className={styles.topBarItem}>
             <Clock size={13} color="#38bdf8" />
-            <span>Servicio de Urgencias: <strong>24 Horas / 365 Días</strong></span>
+            <span>Hora Clínica: <strong style={{ fontFamily: 'var(--font-mono)' }}>{timeString || 'Cargando...'}</strong></span>
+          </div>
+          <div className={styles.topBarItem}>
+            <Activity size={13} color="#22c55e" />
+            <span>Telemetría: <strong>3 Quirófanos en Operación</strong></span>
           </div>
           <div className={styles.topBarItem}>
             <MapPin size={13} color="#38bdf8" />
